@@ -1,0 +1,186 @@
+:root {
+  --primary: #326fa8;
+  --secondary: #edf2f7;
+  --highlight: #e8f0fe;
+  --neutral-bg: #f7fafc;
+  --card-bg: #ffffff;
+  --text-dark: #1a202c;
+  --text-muted: #4a5568;
+  --border-color: #cbd5e0;
+  --radius: 8px;
+  --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-main);
+  background-color: var(--neutral-bg);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+.quiz-header {
+  width: 100%;
+  max-width: 1200px; /* ⬅️ Wider */
+  margin: 1.5rem auto 1.25rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #edf3ff, #f7faff);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.04);
+}
+
+.quiz-title-block {
+  font-family: 'Inter', sans-serif;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0.25rem 0;
+}
+
+.quiz-title {
+  margin: 0;
+  font-size: 2.25rem;
+  color: #1f2937;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.quiz-subtitle {
+  margin-top: 0.6rem;
+  font-size: 1.05rem;
+  color: #4b5563;
+  font-weight: 400;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px; /* ⬅️ Wider */
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  margin-bottom: 4rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* Make ALL header cells including "How able are you..." blue */
+table thead th {
+  background-color: var(--highlight);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Specifically override the first TH (with class question) */
+table thead th.question {
+  background-color: var(--highlight); /* match blue */
+  text-align: left; /* keep left-align for the question */
+}
+
+
+th, td {
+  padding: 0.85rem;
+  border: 1px solid var(--border-color);
+  text-align: center;
+}
+
+th.question, td.question {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-muted);
+  background-color: var(--card-bg);
+}
+
+.section-title {
+  background-color: var(--highlight);
+  color: var(--text-dark);
+  text-align: left;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-right: 0.4rem;
+  cursor: pointer;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.submit {
+  display: inline-block;
+  background-color: var(--primary);
+  color: white;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: background-color 0.3s ease;
+}
+
+.submit:hover {
+  background-color: #245786;
+}
+
+button:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 1.2rem;
+  }
+
+  th, td {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .submit {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Chart container to control radar chart size */
+.chart-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 0;
+}
+
+/* Ensure radar chart fits inside its container */
+canvas#radarChart {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+}

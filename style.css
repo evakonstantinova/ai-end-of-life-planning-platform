@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --primary: #326fa8;
+  --secondary: #edf2f7;
+  --highlight: #e8f0fe;
+  --neutral-bg: #f7fafc;
+  --card-bg: #ffffff;
+  --text-dark: #1a202c;
+  --text-muted: #4a5568;
+  --border-color: #cbd5e0;
+  --radius: 16px;
+  --font-main: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-main);
+  overflow-x: hidden;
+  position: relative;
+  color: #2a2a2a;
+  background: url('assets/images/home.png') no-repeat center center fixed;
+  background-size: cover;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  padding: 0 2vw;
+}
+
+p {
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-bottom: 48px;
+  color: #444;
+  max-width: 90vw;
+  text-align: center;
+  padding: 0 2vw;
+}
+
+/* ────────────── NAVBAR ────────────── */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 5vw;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #ffffff;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 600;
+  color: #e7a426;
+}
+
+.navbar-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2vw;
+  z-index: 1;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: var(--text-dark);
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.navbar-links a:hover {
+  border-bottom: 2px solid var(--text-dark);
+}
+
+.login-button {
+  background-color: #f1f1f1;
+  color: #333;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  z-index: 2;
+}
+
+.login-button:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.03);
+}
+
+/* ────────────── MAIN CONTENT ────────────── */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 100vh;
+  padding-top: 120px;
+  color: #2a2a2a;
+  z-index: 1;
+  position: relative;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  box-sizing: border-box;
+}
+
+/* ────────────── BUTTONS ────────────── */
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2vw;
+  padding: 1rem;
+  box-sizing: border-box;
+  margin-top: 1rem;
+}
+
+.btn,
+.buttons button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1.2rem 2rem;
+  background-color: var(--card-bg);
+  color: var(--text-dark);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  width: 260px;
+  max-width: 90vw;
+  white-space: nowrap;
+}
+
+.btn:hover,
+.buttons button:hover {
+  background-color: var(--highlight);
+  border-color: #0077ee;
+  color: #0077ee;
+  transform: scale(1.04);
+}
+
+.btn i,
+.buttons button i {
+  font-size: 20px;
+  color: inherit;
+}
+
+/* ────────────── FOOTER ────────────── */
+.footer {
+  width: 100%;
+  background-color: #fff;
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  color: #333;
+  border-top: 1px solid #e2e2e2;
+  margin-top: 80px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #2a2a2a;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #0077ee;
+}
+
+.footer-copy {
+  font-size: 13px;
+  text-align: center;
+}
+

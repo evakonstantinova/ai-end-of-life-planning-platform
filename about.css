@@ -1,0 +1,126 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Full Page Setup */
+  html, body {
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
+  }
+  
+  /* Page Container */
+  .page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Navbar */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5vw;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: 600;
+    color: #dc6c10;
+  }
+  
+  .navbar-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2vw;
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  .navbar-links a {
+    text-decoration: none;
+    color: #2a2a2a;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .navbar-links a:hover {
+    border-bottom: 2px solid #2a2a2a;
+  }
+  
+  /* Main Content */
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 160px 10vw 40px 10vw; /* Top padding for navbar */
+    background: url('assets/images/about.png') no-repeat center top fixed;
+    background-size: cover;
+    background-color: #f9f9f9;
+  }
+  
+  /* About Text */
+  .about-text {
+    max-width: 700px;
+    color: #1a1a1a;
+  }
+  
+  .about-text h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+  
+  .about-text p {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    font-weight: 400;
+  }
+  
+  /* Footer */
+  .footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 20px 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    font-size: 1rem;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
+    width: 100%;
+  }
+  
+  .footer-links {
+    margin-bottom: 8px;
+  }
+  
+  .footer-links a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .footer-links a:hover {
+    color: #1a1a1a;
+  }
+  
+  .footer-copy {
+    color: #777;
+    font-size: 0.9rem;
+  }
+  

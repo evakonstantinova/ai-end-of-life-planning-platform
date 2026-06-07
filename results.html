@@ -1,0 +1,129 @@
+<!-- results.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Death Literacy Quiz – Your Summary</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="results.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Completed Progress Bar -->
+  <div class="progress-container">
+    <div id="progressBar" class="progress-bar" style="width:100%"></div>
+  </div>
+
+  <!-- Results -->
+  <main class="quiz-container">
+    <section class="quiz-card">
+      <h2>Well Done!</h2>
+      <p class="prompt">
+        You’ve completed the Death Literacy Quiz.  
+        Thanks for taking the time to reflect on your end-of-life planning experiences.
+      </p>
+
+      <!-- Personalized feedback -->
+      <div class="results-intro">
+      
+        <p>This section reflects your strengths and areas to grow in end-of-life literacy.</p>
+      </div>
+      <div id="feedback-block"></div>
+      <div class="chart-container">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </section>
+  </main>
+
+  
+  <!-- Feedback Fetch Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const userId = new URLSearchParams(window.location.search).get("uid");
+      const responseId = new URLSearchParams(window.location.search).get("rid");
+
+      if (!userId || !responseId) return;
+      if (sessionStorage.getItem("feedbackFetched") === "true") return;
+      sessionStorage.setItem("feedbackFetched", "true");
+
+      fetch(`http://127.0.0.1:5000/get-feedback?uid=${userId}&rid=${responseId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) throw new Error(data.error);
+          console.log("✅ Feedback received:", data);
+
+          const container = document.querySelector(".quiz-card");
+
+          // Feedback section
+          const feedbackBlock = document.createElement("div");
+          feedbackBlock.innerHTML = "<h3>📋 Personalized AI Feedback:</h3>";
+          data.feedback.forEach(item => {
+            const p = document.createElement("p");
+            p.textContent = item;
+            feedbackBlock.appendChild(p);
+          });
+          container.appendChild(feedbackBlock);
+
+          // Reorder and filter radar chart data
+          const desiredOrder = [
+            "Talking Support",
+            "Hands-On Support",
+            "Experience",
+            "Practical Knowledge",
+            "Community Support 1",
+            "Community Support 2"
+          ];
+
+          const filteredLabels = [];
+          const filteredValues = [];
+
+          desiredOrder.forEach(label => {
+            if (label in data.scores) {
+              filteredLabels.push(label);
+              filteredValues.push(data.scores[label]);
+            }
+          });
+
+          // Chart section
+          const ctx = document.getElementById("radarChart").getContext("2d");
+          new Chart(ctx, {
+            type: "radar",
+            data: {
+              labels: filteredLabels,
+              datasets: [{
+                label: "Your Scores",
+                data: filteredValues,
+                backgroundColor: "rgba(54, 162, 235, 0.2)",
+                borderColor: "rgba(54, 162, 235, 1)",
+                pointBackgroundColor: "rgba(54, 162, 235, 1)"
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                r: {
+                  min: 0,
+                  max: 10,
+                  ticks: { stepSize: 2 }
+                }
+              }
+            }
+          });
+        })
+        .catch(err => {
+          console.error("⚠️ Failed to load feedback:", err);
+          const errorBlock = document.createElement("p");
+          errorBlock.textContent = "⚠️ Error loading personalized feedback.";
+          errorBlock.style.color = "red";
+          document.querySelector(".quiz-card").appendChild(errorBlock);
+        });
+    });
+  </script>
+   <div style="margin-top: 3rem;">
+  <a href="index.html" class="home-button">← Back to Home</a>
+</div>
+
+</body>
+</html>
+

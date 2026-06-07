@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - MILO</title>
+  <link rel="stylesheet" href="register.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <img src="assets/images/green.png" class="leaf green" />
+<img src="assets/images/blue.png" class="leaf blue" />
+  <div class="container">
+    <div class="register-card">
+      <h2>Create an Account</h2>
+      <form id="register-form">
+        <div class="input-group">
+          <input type="text" placeholder="First Name" required />
+        </div>
+        <div class="input-group">
+          <input type="text" placeholder="Last Name" required />
+        </div>
+        <div class="input-group">
+          <input type="email" placeholder="Email" required />
+        </div>
+        <div class="input-group password-group">
+          <input type="password" id="createPassword" placeholder="Create Password" required />
+          <span class="toggle" onclick="togglePassword('createPassword', this)">🔐</span>
+        </div>
+        <div class="input-group password-group">
+          <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+          <span class="toggle" onclick="togglePassword('confirmPassword', this)">🔐</span>
+        </div>
+        <label class="checkbox-label">
+          <input type="checkbox" required />
+          I agree to the Terms and Conditions
+        </label>
+        <button type="submit" class="register-btn">Register</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function togglePassword(id, el) {
+      const input = document.getElementById(id);
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      el.textContent = isPassword ? '🔒' : '🔐';
+    }
+
+    document.getElementById("register-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

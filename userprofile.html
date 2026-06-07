@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | MILO</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script type="module" src="userprofile.js"></script>
+    <style>
+        body {
+            background: url('assets/images/home.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0; /* Ensure no default padding */
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            color: #2a2a2a;
+            font-weight: 400;
+        }
+        nav {
+            padding: 10px 3vw;
+            top: 0; /* Ensure nav sticks to the very top */
+        }
+        .navbar-links {
+            gap: 1.5vw;
+        }
+        .profile-box {
+            background: #fff;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto; /* Remove top margin */
+            padding: 80px 1.5rem 1.5rem; /* Add top padding to account for nav height */
+            border-radius: 16px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            min-height: calc(100vh - 140px); /* Ensure it fills the viewport minus nav and footer */
+            box-sizing: border-box;
+        }
+        .profile-box h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 1.2rem;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+        .profile-box h1 span {
+            color: #e7a426;
+        }
+        .profile-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+            color: #2a2a2a;
+            padding: 0 0.5rem;
+        }
+        .profile-field label {
+            font-weight: 500;
+            color: #444;
+        }
+        .profile-field span {
+            font-weight: 400;
+            color: #2a2a2a;
+        }
+        .buttons {
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+        .buttons button {
+            background-color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+            border: 1.5px solid #dcdcdc;
+            color: #2a2a2a;
+            width: 100%;
+            max-width: 180px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .buttons button i {
+            font-size: 16px;
+            color: inherit;
+        }
+        .buttons button:hover {
+            background-color: #f5faff;
+            border-color: #0077ee;
+            color: #0077ee;
+            transform: scale(1.04);
+        }
+        .buttons button:hover i {
+            color: #0077ee;
+        }
+        .footer {
+            padding: 20px 0;
+        }
+        .footer-links {
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+    <div class="logo">MILO</div>
+    <div class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="learn.html">Learn</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="resources.html">Resources</a>
+      <a href="loginSignUp.html" class="login-button" id="authButton">
+        <i class="fas fa-user"></i>
+        <span id="authText">Login</span>
+      </a>
+    </div>
+  </nav>
+
+    <div class="profile-box">
+        <h1>Welcome back, <span id="loggedUserFName"></span>!</h1>
+        <div class="profile-field"><label>Country of residence:</label> <span id="country"></span></div>
+        <div class="profile-field" id="stateDiv" style="display:none;"><label>Name of state (if Australia):</label> <span id="state"></span></div>
+        <div class="profile-field"><label>Which of the following best describes where you live?:</label> <span id="livingArea"></span></div>
+        <div class="profile-field"><label>What age group do you belong to?:</label> <span id="ageGroup"></span></div>
+        <div class="profile-field"><label>Please indicate your gender:</label> <span id="gender"></span></div>
+        <div class="profile-field"><label>Are you currently living with a terminal illness?:</label> <span id="terminalIllness"></span></div>
+        <div class="buttons">
+            <button id="editProfile"><i class="fas fa-user-pen"></i> Edit Profile</button>
+            <button id="logout"><i class="fas fa-right-from-bracket"></i> Logout</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="about.html">About</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="contact.html">Contact</a>
+            <a href="terms.html">Terms</a>
+        </div>
+        <p class="footer-copy">© 2025 MILO | Designed with care 💚</p>
+    </footer>
+
+    <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
+    import { getFirestore, getDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCtgjtZ5k8aDsche1FR1GJqhcMLfKHYQ0o",
+      authDomain: "milo-help.firebaseapp.com",
+      databaseURL: "https://milo-help-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "milo-help",
+      storageBucket: "milo-help.firebasestorage.app",
+      messagingSenderId: "1002114103855",
+      appId: "1:1002114103855:web:12c60a7172c805ec2ca4da",
+      measurementId: "G-6RC1LQG8J9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const db = getFirestore();
+
+    onAuthStateChanged(auth, (user) => {
+      const authButton = document.getElementById('authButton');
+      const authText = document.getElementById('authText');
+      const loggedInUserId = localStorage.getItem('loggedInUserId');
+
+      if (loggedInUserId && user) {
+        const docRef = doc(db, "users", loggedInUserId);
+        getDoc(docRef)
+          .then((docSnap) => {
+            if (docSnap.exists()) {
+              const userData = docSnap.data();
+              authText.textContent = userData.firstName || 'Profile';
+              authButton.href = 'userprofile.html';
+            } else {
+              authText.textContent = 'Login';
+              authButton.href = 'loginSignUp.html';
+            }
+          })
+          .catch((error) => {
+            console.error('Error getting document:', error);
+            authText.textContent = 'Login';
+            authButton.href = 'loginSignUp.html';
+          });
+      } else {
+        authText.textContent = 'Login';
+        authButton.href = 'loginSignUp.html';
+      }
+    });
+  </script>
+</body>
+</html>

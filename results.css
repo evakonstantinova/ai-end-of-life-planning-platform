@@ -1,0 +1,127 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+:root {
+  --primary: #4b6b8a;
+  --primary-hover: #39506d;
+  --background: #f0f2f5;
+  --card-bg: #ffffff;
+  --text-dark: #1a1a1a;
+  --text-muted: #5f6c7b;
+  --border: #d1d5db;
+  --radius: 16px;
+  --font-main: 'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--background);
+  color: var(--text-dark);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quiz-container {
+  width: 100%;
+  max-width: 960px;
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+  padding: 3rem;
+  margin-top: 2rem;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+.quiz-container h2 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.quiz-container p {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
+.chart-container {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f4f6f8;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+canvas {
+  width: 100% !important;
+  height: auto !important;
+  background-color: #f4f6f8;
+  border-radius: var(--radius);
+}
+
+/* Feedback error */
+.feedback-error {
+  color: #dc2626;
+  font-weight: 500;
+  margin-top: 2rem;
+}
+
+/* Back to home button */
+.home-button {
+  display: inline-block;
+  margin-top: 3rem;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 12px;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.home-button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.progress-container {
+  width: 100%;
+  background-color: #cfd8e3;
+  height: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--primary);
+  transition: width 0.3s ease;
+}
+
+/* Chart container to control radar chart size */
+.chart-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 0;
+}
+
+/* Ensure radar chart fits inside its container */
+canvas#radarChart {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+}

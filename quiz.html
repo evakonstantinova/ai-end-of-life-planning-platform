@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="quiz.css" rel="stylesheet"/>
+
+  <script type="module">
+    import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyCtgjtZ5k8aDsche1FR1GJqhcMLfKHYQ0o",
+      authDomain: "milo-help.firebaseapp.com",
+      projectId: "milo-help",
+      storageBucket: "milo-help.firebasestorage.app",
+      messagingSenderId: "1002114103855",
+      appId: "1:1002114103855:web:12c60a7172c805ec2ca4da",
+      measurementId: "G-68RC1LQG8J9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // Save logged-in UID to localStorage
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      localStorage.setItem("loggedInUserId", user.uid);
+    } else {
+      alert("You are not logged in. Please log in to submit the quiz.");
+    }
+  });
+
+    window.submitQuiz = async function () {
+  if (!validateQuiz()) {
+    alert("Please answer all required questions before submitting.");
+    const firstIncomplete = document.querySelector('.incomplete');
+    if (firstIncomplete) {
+      firstIncomplete.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return;
+  }
+
+  const responses = {};
+  for (let i = 1; i <= 54; i++) {
+    const value = localStorage.getItem(`Q${i}`);
+    if (value) {
+      const key = `Q${String(i).padStart(2, '0')}`;
+    responses[key] = isNaN(value) ? value : Number(value);
+    }
+  }
+
+  // Also save extra background questions
+  ["BG1", "BG2", "BG3"].forEach((bgKey) => {
+    const val = localStorage.getItem(bgKey);
+    if (val) responses[bgKey] = val;
+ });
+
+  const userId = localStorage.getItem("loggedInUserId");
+  if (!userId) {
+    alert("You must be logged in to submit the quiz.");
+    return;
+  }
+
+  try {
+  responses.timestamp = new Date().toISOString();  // Correctly set timestamp
+
+  const docRef = await addDoc(collection(db, `users/${userId}/quizResponses`), responses);
+  const responseId = docRef.id;
+
+  alert("Thank you! Your responses have been saved.");
+
+  // Reset fetch flag for the results page
+  sessionStorage.removeItem("feedbackFetched");
+
+  // Redirect with responseId
+  window.location.href = `results.html?uid=${userId}&rid=${responseId}`;
+} catch (error) {
+  console.error("Error saving to Firestore:", error);
+  alert("Error saving your responses. Please try again.");
+}
+};
+  </script>
+</head>
+<body>
+  <header class="quiz-header">
+    <div class="quiz-title-block">
+      <h1 class="quiz-title">Death Literacy Index</h1>
+      <p class="quiz-subtitle">Measuring knowledge, skills, and support around end-of-life care</p>
+    </div>
+  </header>
+
+
+<div class="container">
+<!-- ── Group 1: Q16–Q21 ───────────────────────────────────────────────────────── -->
+<!-- Q16 -->
+<h2>Conversations about dying, death or grief. </h2>
+<table id="conversations-table">
+<thead>
+<tr>
+<th class="question">How able are you to have the following conversations, where 1 = not at all able to 5 = very able?</th>
+<th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<!-- Q17 -->
+<h2>Providing hands on care. </h2>
+<table id="care-table">
+<thead>
+<tr>
+<th class="question">How able are you to do the following, where 1 = not at all able to 5 = very able?</th>
+<th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<!-- Q18 -->
+<h2>Previous experiences of grief, losing someone, or other important life events have. </h2>
+<table id="experience-table">
+<thead>
+<tr>
+<th class="question">To what extent do you agree? (1 = do not agree at all, 5 = strongly agree)</th>
+<th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<!-- Q19 -->
+<h2>End-of-Life Knowledge &amp; Documentation.</h2>
+<table id="knowledge-table">
+<thead>
+<tr>
+<th class="question">To what extent do you agree with the following statements? (1 = do not agree at all, 5 = strongly agree)</th>
+<th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<!-- Q20 -->
+<h2>Others can help me provide end of life care.</h2>
+<table id="support-table">
+<thead>
+<tr>
+<th class="question">Please rate your level of agreement with the following statements -  If I were to provide end-of-life care for someone, I know people who could help me (on a scale of 1–5 between Strongly disagree and Strongly agree)</th>
+<th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<!-- Q21 -->
+<h2>Support groups in my community.</h2>
+<table id="groups-table">
+<thead>
+<tr>
+<th class="question">Please rate your level of agreement with the following statements - If I were to provide end of life care for someone, there is support in my community for (on a scale of 1-5 between Strongly disagree to Strongly agree)</th>
+<th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<!-- ── Group 2: Q6–Q15 ───────────────────────────────────────────────────────── -->
+<!-- Q6 -->
+<h2>Personal End-of-Life Planning.</h2>
+<table id="planning-table">
+<thead>
+<tr>
+<th class="question">Have you made any plans for the end of your life?</th>
+<th>Yes</th><th>No</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<!-- Q7–Q14 -->
+<h2>End-of-life exposure.</h2>
+<table id="dirExp-table">
+<thead>
+<tr>
+<th class="question">Please indicate which of the following experiences you have had</th>
+<th>Yes</th><th>No</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<!-- Q15 -->
+<h2>Sense of Community Support.</h2>
+<table id="community-table">
+<thead>
+<tr>
+<th class="question">Please indicate how you feel about the following sentances (1 = do not agree at all, 5 = strongly agree)</th>
+<th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<!-- ── Group 3: Q22–Q25 ───────────────────────────────────────────────────────── -->
+<!-- Q22 -->
+<h2>Emotional Coping &amp; Preparedness</h2>
+<table id="coping-table">
+<thead>
+<tr>
+<th class="question">Please rate how much you agree with each statement (1 = do not agree at all, 5 = completely agree)</th>
+<th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<!-- Q23–Q25 -->
+<h2>Background Information</h2>
+<label>What is your ancestry?<br/>
+<input id="BG1" type="text"/>
+</label><br/><br/>
+<label>Do you believe in afterlife?<br/>
+<input name="BG2" type="radio" value="Yes"/> Yes
+      <input name="BG2" type="radio" value="No"/> No
+    </label><br/><br/>
+<label>Which religion do you identify with?<br/>
+<input id="BG3" type="text"/>
+</label>
+<button class="submit" disabled="" id="submitBtn" >Submit</button>
+</div>
+<script>
+  // ── Question Lists ─────────────────────────────────────────────────────────
+  const conversations = [
+    {id:'Q1', text:'Talking about death, dying or grief to a close friend'},
+    {id:'Q2', text:'Talking about death, dying or grief to a child'},
+    {id:'Q3', text:'Talking to a grieving person about their loss'},
+    {id:'Q4', text:'Talking to a health professional about getting support for a dying person where they live'}
+  ];
+  const care = [
+    {id:'Q5', text:'Feed or help a person to eat'},
+    {id:'Q6', text:'Wash a person'},
+    {id:'Q7', text:'Lift or help a person move'},
+    {id:'Q8', text:'Administer injections'}
+  ];
+  const previousExp = [
+    {id:'Q9', text:'Made me more emotionally prepared to support others with death dying and bereavement'},
+    {id:'Q10', text:'Made me think about what is important in life and not important in life'},
+    {id:'Q11', text:'Developed my wisdom and understanding'},
+    {id:'Q12', text:'Made me more compassionate toward myself'},
+    {id:'Q13', text:'Made me better prepared for similar challenges in the future'}
+  ];
+  const knowledge = [
+    {id:'Q14', text:'I know rules and regulations when a person dies at home'},
+    {id:'Q15', text:'I know what documents are needed when planning for death'},
+    {id:'Q16', text:'I know enough about the healthcare system to find the support that a dying person needs'},
+    {id:'Q17', text:'I know enough to make decisions about funeral services and options'},
+    {id:'Q18', text:'I know how to access palliative care in my area'},
+    {id:'Q19', text:'I know enough about how illnesses progress to make decisions about medical treatments at end of life'},
+    {id:'Q20', text:'I know about the ways that cemetery staff can be of help around funerals'}
+  ];
+  const support = [
+    {id:'Q21', text:'To get support in the area where I live, e.g., from clubs, associations, or volunteer organizations'},
+    {id:'Q22', text:'To get help with providing day to day care for a person at the end of life'},
+    {id:'Q23', text:'To get equipment that is required for care'},
+    {id:'Q24', text:'To get support that is culturally appropriate for a person'},
+    {id:'Q25', text:'To get emotional support for myself'}
+  ];
+  const groups = [
+    {id:'Q26', text:'People with life threatening illnesses'},
+    {id:'Q27', text:'People who are nearing the end of their lives'},
+    {id:'Q28', text:'People who are caring for a dying person'},
+    {id:'Q29', text:'People who are grieving'}
+  ];
+  const planning = [
+    {id:'Q30', text:'Written a will'},
+    {id:'Q31', text:'I have written down my wishes for end of life care (e.g. made an advance care directive)'},
+    {id:'Q32', text:'Appointed someone to make decisions regarding your health or wellbeing e.g. Enduring guardianship/ Health care proxy'},
+    {id:'Q33', text:'Appointed someone to make decisions regarding finances or property e.g. Enduring Power of Attorney/ Legally appointed substitute decision maker'}
+  ];
+  const directExp = [
+    {id:'Q34', text:'I have kept someone company who is near death'},
+    {id:'Q35', text:'I have witnessed the death of another person'},
+    {id:'Q36', text:'I have spent time with a person after their death'},
+    {id:'Q37', text:'I have helped care for a dead body'},
+    {id:'Q38', text:'I do paid work or have done paid work with people at end of life or supporting people through loss and grief'},
+    {id:'Q39', text:'I am a volunteer or have volunteered with people at end of life or supporting people through loss and grief'},
+    {id:'Q40', text:'I have attended training on helping people with dying, grief or bereavement'},
+    {id:'Q41', text:'Are you currently a health or medical practitioner?'}
+  ];
+  const community = [
+    {id:'Q42', text:'Most people in my community are helpful'},
+    {id:'Q43', text:'I have someone I can call on for help'},
+    {id:'Q44', text:'I feel connected to my community'},
+    {id:'Q45', text:'I can rely on people in my community'}
+  ];
+  const coping = [
+    {id:'Q46', text:'I am aware of the full array of emotions which characterize human grief'},
+    {id:'Q47', text:'I feel prepared to face my dying process'},
+    {id:'Q48', text:'I can put words to my gut-level feelings about death and dying'},
+    {id:'Q49', text:'I know who to contact when death occurs'},
+    {id:'Q50', text:'I will be able to cope with future losses'},
+    {id:'Q51', text:'I know how to listen to others, including the terminally ill'},
+    {id:'Q52', text:'I can help someone with their thoughts and feelings about death and dying'},
+    {id:'Q53', text:'I would be able to talk to a friend or family member about death'},
+    {id:'Q54', text:'I can lessen the anxiety of those around me when discussing death'}
+  ];
+
+  // ── Builders ────────────────────────────────────────────────────────────────
+  function buildLikert(list, tableId, scale) {
+    const tbody = document.querySelector(`#${tableId} tbody`);
+    list.forEach(q => {
+      const row = document.createElement('tr');
+      row.innerHTML = `<td class="question">${q.text}</td>` +
+        Array.from({length: scale}, (_, i) => `
+          <td><input type="radio" name="${q.id}" value="${i+1}"
+          ${localStorage.getItem(q.id) === (i+1).toString() ? 'checked' : ''}/></td>`
+        ).join('');
+      tbody.appendChild(row);
+      row.querySelectorAll(`input[name="${q.id}"]`)
+        .forEach(r => r.onchange = e => {
+          localStorage.setItem(q.id, e.target.value);
+          validateQuiz();
+        });
+    });
+  }
+
+  function buildYesNo(list, tableId) {
+    const tbody = document.querySelector(`#${tableId} tbody`);
+    list.forEach(q => {
+      const row = document.createElement('tr');
+      row.innerHTML = `<td class="question">${q.text}</td>` +
+        ['Yes','No'].map(v => `
+          <td><input type="radio" name="${q.id}" value="${v}"
+          ${localStorage.getItem(q.id) === v ? 'checked' : ''}/></td>`
+        ).join('');
+      tbody.appendChild(row);
+      row.querySelectorAll(`input[name="${q.id}"]`)
+        .forEach(r => r.onchange = e => {
+          localStorage.setItem(q.id, e.target.value);
+          validateQuiz();
+        });
+    });
+  }
+
+  // ── Validation ──────────────────────────────────────────────────────────────
+  function validateQuiz() {
+    let valid = true;
+
+    document.querySelectorAll('table').forEach(table => {
+      table.querySelectorAll('tbody tr').forEach(row => {
+        const name = row.querySelector("input[type='radio']")?.name;
+        if (name && !document.querySelector(`input[name="${name}"]:checked`)) {
+          valid = false;
+        }
+      });
+    });
+
+    const txt23 = document.getElementById('BG1');
+    const txt25 = document.getElementById('BG3');
+    if (!txt23.value.trim() || !txt25.value.trim()) valid = false;
+
+    const q24Selected = document.querySelector('input[name="BG2"]:checked');
+    if (!q24Selected) valid = false;
+
+    document.getElementById("submitBtn").disabled = !valid;
+    return valid;
+  }
+     
+
+  // ── Initialize ─────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    buildLikert(conversations, 'conversations-table', 5);
+    buildLikert(care, 'care-table', 5);
+    buildLikert(previousExp, 'experience-table', 5);
+    buildLikert(knowledge, 'knowledge-table', 5);
+    buildLikert(support, 'support-table', 5);
+    buildLikert(groups, 'groups-table', 5);
+    buildYesNo(planning, 'planning-table');
+    buildYesNo(directExp, 'dirExp-table');
+    buildLikert(community, 'community-table', 5);
+    buildLikert(coping, 'coping-table', 5);
+    document.getElementById("submitBtn").addEventListener("click", submitQuiz);
+     
+
+    const txt23 = document.getElementById('BG1');
+    txt23.value = localStorage.getItem('BG1') || '';
+    txt23.addEventListener('input', () => {
+      localStorage.setItem('BG1', txt23.value);
+      validateQuiz();
+    });
+
+    const txt25 = document.getElementById('BG3');
+    txt25.value = localStorage.getItem('BG3') || '';
+    txt25.addEventListener('input', () => {
+      localStorage.setItem('BG3', txt25.value);
+      validateQuiz();
+    });
+
+    document.getElementsByName('BG2')
+      .forEach(r => r.onchange = e => {
+        localStorage.setItem('BG2', e.target.value);
+        validateQuiz();
+      });
+
+    validateQuiz();
+  });
+  // Expose submitQuiz to button
+  window.submitQuiz = submitQuiz;
+</script>
+
+</body>
+</html>
+

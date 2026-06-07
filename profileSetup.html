@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile Setup | MILO</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script type="module" src="profileSetup.js"></script>
+  <style>
+    body {
+      padding: 30px;
+      background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+    h2 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: rgb(12,11,11);
+      margin-bottom: 1.5rem;
+    }
+    .form-box {
+      background: #fff;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 20px 35px rgba(0,0,1,0.2);
+    }
+    label {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: rgb(12,11,11);
+      margin-bottom: 0.5rem;
+    }
+    form select, form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+      background-color: #fdfdfd;
+    }
+    form select {
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%23444" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+    }
+    .messageDiv {
+      background-color: #ff4d4d;
+      color: white;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      text-align: center;
+      opacity: 1;
+      transition: opacity 1s ease;
+      display: none;
+    }
+    .messageDiv.fade-out {
+      opacity: 0;
+    }
+    .button-container {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    button.save-btn {
+      color: blueviolet;
+      background-color: #c9d6ff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    button.save-btn:hover {
+      text-decoration: underline;
+      color: blue;
+    }
+    button.cancel-btn {
+      color: blueviolet;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      display: inline-block;
+    }
+    button.cancel-btn:hover {
+      color: blue;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h2>Complete Your Profile</h2>
+    <form id="profileForm">
+      <div id="profileMessage" class="messageDiv"></div>
+
+      <!-- Country of Residence -->
+      <label for="country">Country of residence:</label>
+      <select id="country" required>
+        <option value="" disabled selected>Select Country</option>
+        <!-- Populated via JavaScript -->
+      </select>
+
+      <!-- State (Australia only) -->
+      <label for="state" id="stateLabel" style="display:none;">Name of state (if Australia):</label>
+      <select id="state" style="display:none;" required>
+        <option value="" disabled selected>Select State</option>
+        <option value="ACT">Australian Capital Territory</option>
+        <option value="NSW">New South Wales</option>
+        <option value="NT">Northern Territory</option>
+        <option value="QLD">Queensland</option>
+        <option value="SA">South Australia</option>
+        <option value="TAS">Tasmania</option>
+        <option value="VIC">Victoria</option>
+        <option value="WA">Western Australia</option>
+      </select>
+
+      <!-- Living Area -->
+      <label for="livingArea">Which of the following best describes where you live?</label>
+      <select id="livingArea" required>
+        <option value="" disabled selected>Select an option</option>
+        <option value="Urban">Urban area</option>
+        <option value="Semi-urban">Semi-urban area</option>
+        <option value="Regional">Regional area</option>
+        <option value="Rural">Rural area</option>
+        <option value="Remote">Remote area</option>
+      </select>
+
+      <!-- Age Group -->
+      <label for="ageGroup">What age group do you belong to?</label>
+      <select id="ageGroup" required>
+        <option value="" disabled selected>Select an option</option>
+        <option value="Under 18">Under 18</option>
+        <option value="18-24">18-24 years</option>
+        <option value="25-34">25-34 years</option>
+        <option value="35-44">35-44 years</option>
+        <option value="45-54">45-54 years</option>
+        <option value="55-64">55-64 years</option>
+        <option value="65-79">65-79 years</option>
+        <option value="80+">80+ years</option>
+      </select>
+
+      <!-- Gender -->
+      <label for="gender">Please indicate your gender:</label>
+      <select id="gender" required>
+        <option value="" disabled selected>Select an option</option>
+        <option value="Woman/Female">Woman/Female</option>
+        <option value="Man/Male">Man/Male</option>
+        <option value="Non-binary">Non-binary/genderqueer/gender-fluid</option>
+        <option value="Different">I use a different term</option>
+        <option value="Prefer not">Prefer not to answer</option>
+      </select>
+
+      <!-- Custom Gender Text Box -->
+      <label for="customGender" id="customGenderLabel" style="display:none;">Specify your gender:</label>
+      <input type="text" id="customGender" placeholder="Enter gender" style="display:none;" />
+
+      <!-- Terminal Illness -->
+      <label for="terminalIllness">Are you currently living with a terminal illness?</label>
+      <select id="terminalIllness" required>
+        <option value="" disabled selected>Select an option</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+
+      <div class="button-container">
+        <button type="submit" class="save-btn">Save Details</button>
+        <br>
+        <button type="button" id="cancelButton" class="cancel-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

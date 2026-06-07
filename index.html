@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MILO</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="logo">MILO</div>
+    <div class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="learn.html">Learn</a>
+      <a href="resources.html">Resources</a>
+    </div>
+    <a href="loginSignUp.html" class="login-button"  id="authButton">
+      <i class="fas fa-user"></i>
+      <span id="authText">Login</span>
+    </a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="content">
+    <h1 class="homepage-title">Death Literacy Questionnaire</h1>
+    <p>Providing knowledge, support, and resources for end-of-life care</p>
+    <div class="buttons">
+      <a id="startQuizBtn" class="btn">
+        <span><i class="fa-solid fa-circle-check"></i> Start Quiz</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="about.html">About</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="contacts.html">Contact</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <div class="footer-copy">
+      &copy; 2025 MILO | Designed with care <span style="color: green;">💚</span>
+    </div>
+  </footer>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
+    import { getFirestore, getDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCtgjtZ5k8aDsche1FR1GJqhcMLfKHYQ0o",
+      authDomain: "milo-help.firebaseapp.com",
+      databaseURL: "https://milo-help-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "milo-help",
+      storageBucket: "milo-help.firebasestorage.app",
+      messagingSenderId: "1002114103855",
+      appId: "1:1002114103855:web:12c60a7172c805ec2ca4da",
+      measurementId: "G-6RC1LQG8J9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const db = getFirestore();
+
+    onAuthStateChanged(auth, (user) => {
+  const authButton = document.getElementById('authButton');
+  const authText = document.getElementById('authText');
+
+  if (user) {
+    //  Save UID for later use (like in quiz.html)
+    localStorage.setItem('loggedInUserId', user.uid);
+
+    const docRef = doc(db, "users", user.uid); // use user.uid directly
+    getDoc(docRef)
+      .then((docSnap) => {
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          authText.textContent = userData.firstName || 'Profile';
+          authButton.href = 'userprofile.html';
+        } else {
+          authText.textContent = 'Login';
+          authButton.href = 'loginSignUp.html';
+        }
+      })
+      .catch((error) => {
+        console.error('Error getting document:', error);
+        authText.textContent = 'Login';
+        authButton.href = 'loginSignUp.html';
+      });
+  } else {
+    authText.textContent = 'Login';
+    authButton.href = 'loginSignUp.html';
+  }
+});
+//  Secure quiz access logic
+    document.getElementById("startQuizBtn").addEventListener("click", (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+
+      if (user) {
+        window.location.href = "quiz.html";
+      } else {
+        alert("Please login to take the quiz.");
+        window.location.href = "loginSignUp.html";
+      }
+    });
+  </script>
+
+</body>
+</html>
